@@ -474,7 +474,7 @@ if($section === 'borrow'){
                 </a>
             </form>
         <?php else: ?>
-    <style>
+    <!-- <style>
     table {
         border-collapse: collapse;
         width: 100%;
@@ -487,7 +487,7 @@ if($section === 'borrow'){
     th, td {
         padding: 8px;
     }
-    </style>
+    </style> -->
 
             <table cellpadding="10">
                 <thead>
