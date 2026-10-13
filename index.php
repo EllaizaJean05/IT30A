@@ -367,6 +367,22 @@ if($section === 'borrow'){
 
     $borrows = $stmt->fetchAll();
 
+    //Borrow a book
+    if($section==='borrow' && $action==='create'){
+    }
+    if($section==='borrow' && $action==='return'){
+        $borrowId = (int) ($_GET['id'] ?? 0);
+        $stmt = $pdo->prepare("
+        UPDATE borrow
+        SET borrow_return_date=NOW()
+        WHERE borrow_id=?
+        
+        ");
+        $stmt -> execute([$borrowId]);
+        $_SESSION['alert'] = 'Book returned successfully.';
+        
+        header("Location: index.php?section=borrow");
+    }
 
 }
 
@@ -736,26 +752,24 @@ if($section === 'borrow'){
                 </form>
         <?php endif; ?>
         
-    <h2>Borrow Records</h2>
+   <h2>Borrow Records</h2>
 
         <table cellpadding="5">
             <thead>
                 <tr>
                     <th>Borrow ID</th>
                     <th>Student Name</th>
-                    <th>Book Title</th>
-                    <th>Book Author</th>
-                    <th>Created At</th>
-                    <th>Returned At</th>
+                    <th>Book</th>
+                    <th>Borrow Date</th>
+                    <th>Returned Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
 
             <tbody>
-
-                <?php foreach($borrows as $borrow): ?>
-
+                <?php foreach ($borrows as $borrow): ?>
                     <tr>
-
                         <td>
                             <?= htmlspecialchars($borrow['borrow_id']) ?>
                         </td>
@@ -763,36 +777,49 @@ if($section === 'borrow'){
                         <td>
                             <?= htmlspecialchars(
                                 $borrow['student_first_name']
-                                . " "
-                                . $borrow['student_last_name']
+                                . " " .
+                                $borrow['student_last_name']
                             ) ?>
                         </td>
+
                         <td>
-                            <?= htmlspecialchars($borrow['book_title']) ?>
+                            <?= htmlspecialchars(
+                                $borrow['book_title']
+                                . " - " .
+                                $borrow['book_author']
+                            ) ?>
                         </td>
-                        <td>
-                            <?= htmlspecialchars($borrow['book_author']) ?>
-                        </td>
+
                         <td>
                             <?= htmlspecialchars($borrow['borrow_date']) ?>
                         </td>
 
                         <td>
-                            <?php if($borrow['borrow_return_date'] === null): ?>
-
-                                Not Returned
-
-                            <?php else: ?>
-
+                            <?php if ($borrow['borrow_return_date']): ?>
                                 <?= htmlspecialchars($borrow['borrow_return_date']) ?>
-
+                            <?php else: ?>
+                                Not Returned
                             <?php endif; ?>
                         </td>
 
+                        <td>
+                            <?php if ($borrow['borrow_return_date']): ?>
+                                Returned
+                            <?php else: ?>
+                                Borrowed
+                            <?php endif; ?>
+                        </td>
+
+                        <td>
+                            <?php if (!$borrow['borrow_return_date']): ?>
+                                <a href="index.php?section=borrow&action=return&id=<?= $borrow['borrow_id'] ?>"
+                                    onclick="return confirm('Mark this book as returned?');">
+                                    Return Book
+                                </a>
+                            <?php endif; ?>
+                        </td>
                     </tr>
-
                 <?php endforeach; ?>
-
             </tbody>
         </table>
     <?php endif; ?>
