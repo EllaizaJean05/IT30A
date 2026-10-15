@@ -1,5 +1,4 @@
 --Find books that are currently borrowed 
-
 SELECT
     br.borrow_id,
 

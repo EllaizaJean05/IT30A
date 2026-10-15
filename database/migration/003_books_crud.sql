@@ -53,7 +53,7 @@ LIMIT 1;
 -- Book SQL #9 - Update book title and author using specific id number
 UPDATE books
 SET
-    book_title = 'ELLE KIRKS',
-    book_author = 'BREW BOOKS',
-    book_category = 'ROMANCE'
+    book_title = 'Brew Books',
+    book_author = 'Elle Kirks',
+    book_category = 'Romance'
 WHERE BOOK_ID = 2;
