@@ -74,6 +74,7 @@ $recentStmt = $pdo->query("
     LIMIT 5
 ");
 $recentBorrows = $recentStmt->fetchAll();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -252,6 +253,7 @@ $recentBorrows = $recentStmt->fetchAll();
             }
         });
     })();
+    
 // ---------- BAR: BORROWS LAST 7 DAYS ----------
 const borrowCtx = document
     .getElementById('borrowChart')
